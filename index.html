@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cabeça Leve — Pare de lutar contra o espelho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #E6E0D3;
+    --bg-dark: #16140F;
+    --ink: #1A1712;
+    --paper: #F3EFE5;
+    --accent: #5C7A87;
+    --accent-warm: #C6863F;
+    --line: rgba(26,23,18,0.14);
+    --line-dark: rgba(243,239,229,0.18);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    line-height:0.92;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+
+  :focus-visible{
+    outline:3px solid var(--accent-warm);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(230,224,211,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:18px; padding-bottom:18px;
+  }
+  .logo{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:900;
+    font-size:1.4rem;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .logo span{ color:var(--accent-warm); }
+  .nav-cta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    letter-spacing:0.05em;
+    padding:10px 18px;
+    border:1px solid var(--ink);
+    border-radius:100px;
+    text-decoration:none;
+    transition: background .2s ease, color .2s ease;
+  }
+  .nav-cta:hover{ background:var(--ink); color:var(--paper); }
+
+  .hero{
+    background:var(--bg-dark);
+    color:var(--paper);
+    position:relative;
+    overflow:hidden;
+    padding:96px 0 120px;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+  .hero .eyebrow{ color:var(--accent-warm); margin-bottom:18px; }
+  .hero h1{
+    font-size:clamp(2.6rem, 5.4vw, 4.6rem);
+    color:var(--paper);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent-warm);
+  }
+  .hero p.lead{
+    margin-top:26px;
+    max-width:46ch;
+    font-size:1.08rem;
+    color:rgba(243,239,229,0.78);
+  }
+  .hero .cta-row{
+    margin-top:38px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .btn-primary{
+    background:var(--accent-warm);
+    color:var(--bg-dark);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:500;
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    text-decoration:none;
+    padding:16px 30px;
+    border-radius:100px;
+    display:inline-block;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); background:#D89B57; }
+  .btn-ghost{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--paper);
+    text-decoration:none;
+    border-bottom:1px solid var(--line-dark);
+    padding-bottom:2px;
+  }
+
+
+  .shine-wrap{
+    position:relative;
+    aspect-ratio:1/1;
+    width:100%;
+    max-width:420px;
+    margin:0 auto;
+  }
+  .shine-circle{
+    position:absolute; inset:0;
+    border-radius:50%;
+    overflow:hidden;
+    background: linear-gradient(160deg, #2B2620 0%, #171410 70%);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6);
+  }
+  .shine-circle .shine-photo{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position: center 20%;
+    transform: scale(1);
+    transform-origin: center;
+  }
+  .shine-circle .shine-overlay{
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 38% 32%, rgba(243,239,229,0.55) 0%, rgba(243,239,229,0.14) 16%, rgba(197,134,63,0.12) 34%, transparent 58%);
+    mix-blend-mode: screen;
+    pointer-events:none;
+  }
+  .strands{
+    position:absolute; inset:0;
+    border-radius:50%;
+    overflow:hidden;
+  }
+  .strands::before{
+    content:"";
+    position:absolute;
+    top:-6%; left:0; right:0; height:46%;
+    background-image: repeating-linear-gradient(
+      100deg,
+      rgba(243,239,229,0.5) 0px,
+      rgba(243,239,229,0.5) 1.5px,
+      transparent 1.5px,
+      transparent 9px
+    );
+    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  }
+  .shine-ring{
+    position:absolute; inset:-22px;
+    border-radius:50%;
+    border:1px solid var(--line-dark);
+  }
+  .shine-caption{
+    position:absolute;
+    bottom:-38px; left:50%;
+    transform:translateX(-50%);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:rgba(243,239,229,0.55);
+    white-space:nowrap;
+  }
+
+  @media (max-width: 860px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .shine-wrap{ max-width:280px; }
+  }
+
+  
+  section{ padding:96px 0; }
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(2rem,4vw,3rem); margin-top:14px; }
+  .section-head p{ margin-top:18px; color:rgba(26,23,18,0.7); font-size:1.05rem; max-width:56ch; }
+
+
+  .ciclo{ background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .ciclo-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  .ciclo-item{
+    padding:40px 36px;
+    border-right:1px solid var(--line);
+    position:relative;
+  }
+  .ciclo-item:last-child{ border-right:none; }
+  .ciclo-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--accent-warm);
+    letter-spacing:0.1em;
+  }
+  .ciclo-item h3{
+    margin-top:14px;
+    font-size:1.7rem;
+    text-transform:none;
+    font-weight:700;
+  }
+  .ciclo-item p{
+    margin-top:12px;
+    color:rgba(26,23,18,0.68);
+    font-size:0.98rem;
+  }
+  @media (max-width: 760px){
+    .ciclo-grid{ grid-template-columns:1fr; }
+    .ciclo-item{ border-right:none; border-bottom:1px solid var(--line); }
+  }
+
+
+  .beneficios-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .beneficio{
+    background:var(--bg);
+    padding:38px;
+  }
+  .beneficio .mark{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    margin-bottom:18px;
+  }
+  .beneficio h3{
+    font-size:1.3rem;
+    text-transform:none;
+    font-weight:700;
+  }
+  .beneficio p{
+    margin-top:10px;
+    color:rgba(26,23,18,0.68);
+    font-size:0.96rem;
+  }
+  @media (max-width:700px){ .beneficios-grid{ grid-template-columns:1fr; } }
+
+  .galeria{ background:var(--bg-dark); color:var(--paper); }
+  .galeria .section-head p{ color:rgba(243,239,229,0.68); }
+  .galeria .eyebrow{ color:var(--accent-warm); }
+  .galeria .section-head h2{ color:var(--paper); }
+
+  .foto-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  .foto-slot{
+    border:1px dashed var(--line-dark);
+    border-radius:4px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:rgba(243,239,229,0.03);
+  }
+  .foto-slot .foto-img{
+    position:relative;
+    width:100%;
+    height:420px;
+    overflow:hidden;
+    border:1px solid var(--line-dark);
+    background:rgba(243,239,229,0.03);
+  }
+  .foto-slot .foto-img img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+    display:block;
+  }
+  .foto-slot .placeholder-txt{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:rgba(243,239,229,0.4);
+    text-align:center;
+    padding:20px;
+  }
+  .foto-slot .caption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:rgba(243,239,229,0.55);
+    text-align:center;
+    padding:14px 12px;
+    border-top:1px dashed var(--line-dark);
+  }
+  @media (max-width:760px){ .foto-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .foto-grid{ grid-template-columns:1fr; } }
+
+  
+  .citacao{
+    background:var(--paper);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:100px 0;
+    text-align:center;
+  }
+  .citacao blockquote{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700;
+    font-size:clamp(1.6rem, 3.4vw, 2.6rem);
+    text-transform:none;
+    line-height:1.15;
+    max-width:820px;
+    margin:0 auto;
+  }
+  .citacao cite{
+    display:block;
+    margin-top:28px;
+    font-family:'IBM Plex Mono', monospace;
+    font-style:normal;
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:rgba(26,23,18,0.55);
+  }
+
+ 
+  .cta-final{
+    background:var(--bg-dark);
+    color:var(--paper);
+    text-align:center;
+    padding:120px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-final::before{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:900px; height:900px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(197,134,63,0.14) 0%, transparent 65%);
+  }
+  .cta-final .wrap{ position:relative; z-index:2; }
+  .cta-final h2{
+    font-size:clamp(2.4rem, 5vw, 4rem);
+    color:var(--paper);
+  }
+  .cta-final h2 em{ font-style:normal; color:var(--accent-warm); }
+  .cta-final p{
+    margin:22px auto 0;
+    max-width:48ch;
+    color:rgba(243,239,229,0.72);
+  }
+  .cta-final .btn-primary{ margin-top:38px; }
+  footer{
+    background:var(--bg-dark);
+    color:rgba(243,239,229,0.5);
+    border-top:1px solid var(--line-dark);
+    padding:32px 0;
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .btn-primary{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">CABEÇA <span>LEVE</span></div>
+    <a class="nav-cta" href="#final">Vire a página</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Um recado pra quem ainda tá negociando com o espelho</p>
+      <h1>Pare de contar<br>os fios.<br>Comece a<br><em>curtir o brilho.</em></h1>
+      <p class="lead">Não é sobre desistir. É sobre parar de gastar energia numa briga que o calendário já ganhou — e usar essa energia pra outra coisa. A navalha resolve em cinco minutos o que o espelho ansioso não resolve em cinco anos.</p>
+      <div class="cta-row">
+        <a class="btn-primary" href="#ciclo">Entenda o processo</a>
+        <a class="btn-ghost" href="#galeria">Ver antes & depois</a>
+      </div>
+    </div>
+    <div>
+      <div class="shine-wrap">
+        <div class="shine-ring"></div>
+        <div class="shine-circle">
+          <img class="shine-photo" src="Capturar.JPG" alt="">
+          <div class="strands"></div>
+          <div class="shine-overlay"></div>
+        </div>
+        <div class="shine-caption">de linha do cabelo a horizonte livre</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="ciclo" id="ciclo">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">O caminho que quase todo mundo percorre</p>
+      <h2>Três fases até<br>fazer as pazes.</h2>
+      <p>Ninguém acorda um dia e decide raspar por acaso. Existe um trajeto — e reconhecer onde você está nele já é metade do trabalho.</p>
+    </div>
+  </div>
+  <div class="ciclo-grid">
+    <div class="ciclo-item">
+      <span class="ciclo-num">01 — Negação</span>
+      <h3>O boné vira uniforme</h3>
+      <p>Ângulos de foto calculados, penteados de disfarce, produtos milagrosos. Toda essa energia mantendo uma fachada que só cansa.</p>
+    </div>
+    <div class="ciclo-item">
+      <span class="ciclo-num">02 — Luta</span>
+      <h3>A guerra contra o espelho</h3>
+      <p>Tratamentos, promessas, comparação com fotos antigas. Uma queda que a genética já decidiu, mas que você insiste em vencer no grito.</p>
+    </div>
+    <div class="ciclo-item">
+      <span class="ciclo-num">03 — Aceitação</span>
+      <h3>A navalha e o alívio</h3>
+      <p>Três passadas de máquina e a decisão deixa de ser do calendário e passa a ser sua. É o único ponto da história onde você recupera o controle.</p>
+    </div>
+  </div>
+</section>
+
+<section class="beneficios">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">O que muda, na prática</p>
+      <h2>Raspar não é perda.<br>É simplificação.</h2>
+      <p>Tirar da equação o que você não controla libera espaço pro que você controla: postura, presença, o resto da sua cara.</p>
+    </div>
+    <div class="beneficios-grid">
+      <div class="beneficio">
+        <div class="mark">01</div>
+        <h3>Cinco minutos, ponto final</h3>
+        <p>Sem consulta, sem produto, sem plano B. O ritual mais curto que existe na sua rotina de cuidado.</p>
+      </div>
+      <div class="beneficio">
+        <div class="mark">02</div>
+        <h3>Uma imagem, não duas</h3>
+        <p>Sem comparação constante com "antes". Só existe uma versão sua pra administrar — a de agora.</p>
+      </div>
+      <div class="beneficio">
+        <div class="mark">03</div>
+        <h3>Simetria de volta</h3>
+        <p>Entradas, coroa, topo — tudo isso deixa de existir como problema separado. Sobra uma linha só, e ela é sua.</p>
+      </div>
+      <div class="beneficio">
+        <div class="mark">04</div>
+        <h3>A conversa muda de assunto</h3>
+        <p>Quando você para de esconder, os outros param de notar. O que chama atenção é o disfarce, não a calvície.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="galeria" id="galeria">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Registros reais</p>
+      <h2>Antes & depois</h2>
+    </div>
+    <div class="foto-grid">
+      <div class="foto-slot">
+        <div class="foto-img">
+          <img src="crianca.jpg" alt="crianca">
+        </div>
+        <span class="caption">Antes</span>
+      </div>
+      <div class="foto-slot">
+        <div class="foto-img">
+          <img src="processo.jpg" alt="processo">
+        </div>
+        <span class="caption">Processo</span>
+      </div>
+      <div class="foto-slot">
+        <div class="foto-img">
+          <img src="vish.jpg" alt="vish">
+        </div>
+        <span class="caption">Depois</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="citacao">
+  <div class="wrap">
+    <blockquote>
+      "No dia em que raspei, percebi que tinha perdido cabelo anos antes. O que eu tava perdendo até ontem era tempo."
+      <cite>— Siqueira, Maryel</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section class="cta-final" id="final">
+  <div class="wrap">
+    <p class="eyebrow" style="color:var(--accent-warm)">Chega de adiar</p>
+    <h2>Pegue a máquina.<br>Vire a <em>página.</em></h2>
+    <p>Não precisa ser hoje de manhã. Mas quando for, vai ser mais simples do que qualquer tratamento que você já tentou.</p>
+    <a class="btn-primary" href="#">Marcar minha raspagem</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>CABEÇA LEVE</span>
+    <span>feito pra quem decidiu parar de negociar com o espelho</span>
+  </div>
+</footer>
+
+</body>
+</html>
